@@ -1,5 +1,8 @@
 package com.xjh.dsdata.controller;
 
+import org.redisson.api.RBucket;
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -12,6 +15,9 @@ import javax.websocket.server.PathParam;
 @RestController
 @RequestMapping(value="/v1/organizations/{organizationId}/licenses")
 public class LicenseServiceController {
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     // http://127.0.0.1:8080/v1/organizations/12/licenses/m1/25
     @GetMapping(value = "/m1/{licenseId}")
@@ -41,6 +47,14 @@ public class LicenseServiceController {
                 .withId(licenseId)
                 .withProductName("ShangHaoJia")
                 .withLicenseType("food");
+    }
+
+    @GetMapping(value = "/hello")
+    public String aaaa() {
+        RBucket<String> bu = redissonClient.getBucket("name");
+        bu.set("hangzhou");
+        String message = "welcome to HangZhou, ";
+        return message;
     }
 
 }
